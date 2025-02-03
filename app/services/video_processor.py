@@ -1,14 +1,6 @@
 import os
 from moviepy.editor import VideoFileClip, TextClip, CompositeVideoClip, concatenate_videoclips
 
-# def create_summary_video(video_path, summary_text, output_path):
-#     video = VideoFileClip(video_path)
-#     text_clip = TextClip(summary_text, fontsize=24, color='white', bg_color='black')
-#     text_clip = text_clip.set_position('center').set_duration(video.duration)
-#     final_clip = CompositeVideoClip([video, text_clip])
-#     final_clip.write_videofile(output_path, codec='libx264')
-
-
 def extract_important_clips(video_path, webvtt_captions):
     """
     Extract important parts of the video based on WEBVTT timestamps.
@@ -49,7 +41,7 @@ def create_condensed_video(clips, output_path):
 def create_summary_video(video_path, webvtt_captions, summary_text, output_path):
     """
     Create a summary video by trimming unimportant parts, condensing the video,
-    and overlaying the summary text.
+    and overlaying the summary text using MoviePy's built-in text rendering.
     
     Args:
         video_path (str): Path to the original video file.
@@ -61,14 +53,14 @@ def create_summary_video(video_path, webvtt_captions, summary_text, output_path)
     # Extract important parts of the video using WEBVTT timestamps
     important_clips = extract_important_clips(video_path, webvtt_captions)
 
-    #Create a condensed video from the important clips
+    # Create a condensed video from the important clips
     condensed_video_path = "condensed_video.mp4"
     create_condensed_video(important_clips, condensed_video_path)
 
-    # Step 4: Load the condensed video
+    # Load the condensed video
     condensed_video = VideoFileClip(condensed_video_path)
 
-    # Step 5: Create text clip for summary
+    # Create text clip for summary using MoviePy's built-in text rendering
     text_clip = TextClip(
         summary_text,
         fontsize=24,
@@ -79,9 +71,9 @@ def create_summary_video(video_path, webvtt_captions, summary_text, output_path)
     )
     text_clip = text_clip.set_position('center').set_duration(condensed_video.duration)
 
-    #Overlay text on the condensed video
+    # Overlay text on the condensed video
     final_clip = CompositeVideoClip([condensed_video, text_clip])
     final_clip.write_videofile(output_path, codec='libx264')
 
-    #Clean up temporary files
+    # Clean up temporary files
     os.remove(condensed_video_path)
