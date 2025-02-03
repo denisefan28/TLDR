@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+
+summaries/*.mp4
+uploads/*.mp4
+uploads/*.txt
+uploads/*.tvv
